@@ -56,39 +56,55 @@ namespace Sudoku
             return estPresent;
         }
 
-        public static bool absentSurLaRegion(int[,] sudoku, int x, int y)
+        public static bool absentSurLaRegion(int[,] sudoku, int x, int y, double max)
         {
             int valeur = sudoku[x, y];
             bool estPresent = true;
 
-            int _x = x - (x % 3);
-            // 1
-            int _y = y - (y % 3);
-            // 0
+            Console.WriteLine("X : " + x + " Y : " + y);
 
-            for (x = _x; x < _x + 3; x++)
+            int _x = quelMin(max, x);
+            Console.WriteLine("min X :" + _x);
+
+            int _y = quelMin(max, y);
+            Console.WriteLine("min Y :" + _y);
+
+            for (int i = _x; i < _x + 3; i++)
             {
-                for (y = _y; y < _y + 3; y++)
+                for (int j = _y; j < _y + 3; j++)
                 {
-                    if (sudoku[x, y] == valeur)
+                    if (i != x && j != y)
                     {
-                        estPresent = false;
+                        if (sudoku[i, j] == valeur)
+                        {
+                            estPresent = false;
+                        }
                     }
                 }
             }
             return estPresent;
         }
 
-        public static bool quelRegion(int[,] sudoku, int x, int y)
+        public static int quelMin(double max, int valeur)
         {
-            //x = 3
-            //y = 2
+            int min = 0;
 
-            if (x < Math.Sqrt(sudoku.Length)) { 
+            Console.WriteLine("Valeur : " + valeur);
 
+            if (valeur < max && valeur >= 6)
+            {
+                min = 6;
+            }
+            if (valeur < 6 && valeur >= 3)
+            {
+                min = 3;
+            }
+            if (valeur < 3 && valeur >= 0)
+            {
+                min = 0;
             }
 
-            return true;
+            return min;
         }
 
         static void Main(string[] args)
@@ -107,13 +123,10 @@ namespace Sudoku
                        {1,0,0, 6,0,8, 7,0,0},
                        {0,5,0, 0,0,4, 0,0,0}
                       };
+
+            double maxXouY = Math.Sqrt(sudoku.Length);
+
             afficherSudoku(sudoku);
-
-            bool resultat = absentSurLaColonne(sudoku, 1, 3);
-
-            Console.WriteLine(sudoku[1,3]+" est-il absent sur la région? "+ resultat);
-
-            Console.WriteLine("taille :" + Math.Sqrt(sudoku.Length));
 
             Console.ReadLine();
         }
